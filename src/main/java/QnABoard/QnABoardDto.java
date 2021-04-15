@@ -1,70 +1,88 @@
 package QnABoard;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
-
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 public class QnABoardDto {
 	
-	private JdbcTemplate jdbcTemplate;
-	
-	public QnABoardDto(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-	}
-	
-	//게시판 전체 목록 가져오기
-	public List<QnABoardDao> AllList(){
-		String sql = "select * from qnaboard";
+	private int no;				//순서
+	private String id;			//유저
+	private String title;		//제목
+	private String board;		//본문
+	private int ref;			//본문순서
+	private int step;			//자식글 순서
+	private int refOrder;		//자식글 
+	private int AnswerNum;		//자식글 갯수
+	private int ParontNum;		//부모글의 기본키
+	private Timestamp r_date;	//글 작성 시간
 
-		List<QnABoardDao> result = jdbcTemplate.query(sql,new RowMapper<QnABoardDao>() {
-			@Override
-			public QnABoardDao mapRow(ResultSet rs,int rowNum) throws SQLException {
-				QnABoardDao aBoardDto = new QnABoardDao(
-						rs.getString("no"), 
-						rs.getString("title"), 
-						rs.getString("board"), 
-						rs.getInt("ref"), 
-						rs.getInt("step"), 
-						rs.getInt("refOrder"), 
-						rs.getInt("answerNum"), 
-						rs.getInt("parontNum"), 
-						rs.getTimestamp("r_date"));
-				return aBoardDto;
-			}
-		});
-		return result;
-		
-	}
 	
-	//게시판에 글 등록
-	public void qnaInsert(QnABoardDao dao) {
-		String sql = "insert into qnaboard values(?,?,?,?,?,?,?,?,?)";
-		Timestamp time = new Timestamp(System.currentTimeMillis());	//현재 시간받기
-		
-		this.jdbcTemplate.update(sql, 
-				dao.getId(), 
-				dao.getTitle(),
-				dao.getBoard(),
-				dao.getRef(),
-				dao.getStep(),
-				dao.getRefOrder(),
-				dao.getAnswerNum(),
-				dao.getParontNum(),time);
+	public QnABoardDto(String id, String title, String board, int ref, int step, int refOrder, int answerNum,
+			int parontNum, Timestamp r_date) {
+		this.id = id;
+		this.title = title;
+		this.board = board;
+		this.ref = ref;
+		this.step = step;
+		this.refOrder = refOrder;
+		AnswerNum = answerNum;
+		ParontNum = parontNum;
+		this.r_date = r_date;
 	}
 
-	//게시판에 글 수정
-	public void qnaUpdate(QnABoardDao dao) {
-		String sql = "update QNABOARD set title=? , board=? where id=?";
-		
-		this.jdbcTemplate.update(sql, 
-				dao.getTitle(),
-				dao.getBoard(),
-				dao.getId());
+
+	public int getNo() {
+		return no;
 	}
 
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public String getTitle() {
+		return title;
+	}
+
+
+	public String getBoard() {
+		return board;
+	}
+
+
+	public int getRef() {
+		return ref;
+	}
+
+
+	public int getStep() {
+		return step;
+	}
+
+
+	public int getRefOrder() {
+		return refOrder;
+	}
+
+
+	public int getAnswerNum() {
+		return AnswerNum;
+	}
+
+
+	public int getParontNum() {
+		return ParontNum;
+	}
+
+
+	public Timestamp getR_date() {
+		return r_date;
+	}
+	
+	
 }

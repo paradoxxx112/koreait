@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-테스트 중입니다!!
+게시글 페이지
 </body>
 </html>

@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import QnABoard.QnABoardDto;
+import QnABoard.QnABoardDao;
+import controller.QnAController;
 
 @Configuration
 @EnableTransactionManagement
@@ -30,7 +31,15 @@ public class QnABoardConfig {
 	
 	@Bean
 	//dataSource소스의 메서드를 의존받아 QnABoardDto객체 생성
-	public QnABoardDto qnABoardDto(){
-		return new QnABoardDto(dataSource());
+	public QnABoardDao qnaBoardDto(){
+		return new QnABoardDao(dataSource());	//생성자 생성
 	}
+	
+	//QnAController객체 생성 qnaBoardDto의존
+	@Bean
+	public	QnAController qnaController() {
+		QnAController qnaController = new QnAController(qnaBoardDto());	//생성자 생성
+		return qnaController;
+	}
+	
 }
