@@ -23,7 +23,7 @@
 		<!-- Configuration는 무조건   여기서 생성해줘여 프로그램이 실행되면서  컨테이너를 만듬-->
 			<param-value>
 			config.MvcConfig<!-- 패키지이름.클래스이름-->
-			config.ControllerConfig
+			config.RegisterConfig
 			config.QnABoardConfig
 			</param-value>
 		</init-param>

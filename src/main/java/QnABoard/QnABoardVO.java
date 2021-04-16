@@ -2,7 +2,9 @@ package QnABoard;
 
 import java.sql.Timestamp;
 
-public class QnABoardDto {
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class QnABoardVO {
 	
 	private int no;				//순서
 	private String id;			//유저
@@ -15,8 +17,7 @@ public class QnABoardDto {
 	private int ParontNum;		//부모글의 기본키
 	private Timestamp r_date;	//글 작성 시간
 
-	
-	public QnABoardDto(String id, String title, String board, int ref, int step, int refOrder, int answerNum,
+	public QnABoardVO(String id, String title, String board, int ref, int step, int refOrder, int answerNum,
 			int parontNum, Timestamp r_date) {
 		this.id = id;
 		this.title = title;
@@ -28,7 +29,20 @@ public class QnABoardDto {
 		ParontNum = parontNum;
 		this.r_date = r_date;
 	}
-
+	
+	//기본 생성자
+	@Autowired
+	public QnABoardVO() {
+		
+	}
+	
+	//
+	public void setQnABoardVO(String id, String title, String board, Timestamp r_date) {
+		this.id = id;
+		this.title = title;
+		this.board = board;
+		this.r_date = r_date;
+	}
 
 	public int getNo() {
 		return no;
@@ -82,6 +96,10 @@ public class QnABoardDto {
 
 	public Timestamp getR_date() {
 		return r_date;
+	}
+
+	public void setR_date(Timestamp r_date) {
+		this.r_date = r_date;
 	}
 	
 	

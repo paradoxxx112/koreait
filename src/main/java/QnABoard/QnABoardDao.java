@@ -17,14 +17,14 @@ public class QnABoardDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	//게시판 전체 목록 가져오기
-	public List<QnABoardDto> AllList(){
+	//게시판 전체 목록 가져오기(미완성 계층형으로 구현해야함 order by)
+	public List<QnABoardVO> AllList(){
 		String sql = "select * from qnaboard";
 
-		List<QnABoardDto> result = jdbcTemplate.query(sql,new RowMapper<QnABoardDto>() {
+		List<QnABoardVO> result = jdbcTemplate.query(sql,new RowMapper<QnABoardVO>() {
 			@Override
-			public QnABoardDto mapRow(ResultSet rs,int rowNum) throws SQLException {
-				QnABoardDto aBoardDto = new QnABoardDto(
+			public QnABoardVO mapRow(ResultSet rs,int rowNum) throws SQLException {
+				QnABoardVO aBoardDto = new QnABoardVO(
 						rs.getString("id"), 
 						rs.getString("title"), 
 						rs.getString("board"), 
@@ -48,7 +48,7 @@ public class QnABoardDao {
 	public String DBpassword(String id){
 		//join을 통해 REGISTER_USER 테이블에서 비밀번호 값 받아오기
 		String sql = "SELECT u.userPassword FROM QnABoard q , REGISTER_USER u "
-				+ "WHERE u.id = q.id AND q.id = ?";
+				+ "WHERE u.id = q.id AND q.userid = ?";
 		
 		String result = jdbcTemplate.queryForObject(sql,String.class,id);
 				
@@ -57,23 +57,24 @@ public class QnABoardDao {
 	}
 	
 	//게시판에 글 등록
-	public void qnaInsert(QnABoardDto dao) {
-		String sql = "insert into qnaboard values(?,?,?,?,?,?,?,?,?)";
-		Timestamp time = new Timestamp(System.currentTimeMillis());	//현재 시간받기
+	public void qnaInsert(QnABoardVO qnaBoardVO) {
+		String sql = "insert into qnaboard values(seq_qna.nextval,?,?,?,?,?,?,?,?,?)";
 		
 		this.jdbcTemplate.update(sql, 
-				dao.getId(), 
-				dao.getTitle(),
-				dao.getBoard(),
-				dao.getRef(),
-				dao.getStep(),
-				dao.getRefOrder(),
-				dao.getAnswerNum(),
-				dao.getParontNum(),time);
+				qnaBoardVO.getId(), 
+				qnaBoardVO.getTitle(),
+				qnaBoardVO.getBoard(),
+				qnaBoardVO.getRef(),
+				qnaBoardVO.getStep(),
+				qnaBoardVO.getRefOrder(),
+				qnaBoardVO.getAnswerNum(),
+				qnaBoardVO.getParontNum(),
+				qnaBoardVO.getR_date()
+				);
 	}
 
 	//게시판에 글 수정
-	public void qnaUpdate(QnABoardDto dao) {
+	public void qnaUpdate(QnABoardVO dao) {
 		String sql = "update QNABOARD set title=? , board=? where id=?";
 		
 		this.jdbcTemplate.update(sql, 
